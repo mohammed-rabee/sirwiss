@@ -27,3 +27,5 @@ Route::delete('product/{id}', [ProductController::class, 'destroy']);
 
 
 Route::get('productOwner/{id}', [ProductController::class, 'product_owner']);
+Route::get('product_changes/{id}', [ProductController::class, 'product_changes']);
+Route::get('product_search/{phrase}', [ProductController::class, 'product_search']);

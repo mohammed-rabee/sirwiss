@@ -14,6 +14,7 @@ interface ProductInterface
         public function create_product(array $product);
     
         // Update
+        public function create_product_history(array $product);
         public function update_product($id, array $product);
     
         // Delete
@@ -21,5 +22,10 @@ interface ProductInterface
     
         // product owner
         public function get_product_owner_details($id);
+
+        // additional (get the changes from product history)
+        public function get_product_changes($id);
+
+        public function search($phrase);
 }
 

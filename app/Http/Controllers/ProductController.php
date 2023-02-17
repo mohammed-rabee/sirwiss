@@ -25,7 +25,6 @@ class ProductController extends Controller
         try {
 
             return response()->json(['products' => $this->productRepo->get()], 200);
-
         } catch (Exception $e) {
 
             Log::info("Exception in ProductController@index: " . $e->getMessage());
@@ -38,7 +37,6 @@ class ProductController extends Controller
         try {
 
             return response()->json(['product' => $this->productRepo->get_item($id)], 200);
-
         } catch (Exception $e) {
 
             Log::info("Exception in ProductController@show: " . $e->getMessage());
@@ -46,7 +44,7 @@ class ProductController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -61,13 +59,12 @@ class ProductController extends Controller
             // $user = User::first();
 
             // create the product
-            $product = $this->productRepo->create_product($request->only(['name', 'price', 'status']));
+            $product = $this->productRepo->create_product($request->only(['name', 'price', 'status', 'type']));
 
             // seding the email
             // Mail::to($user->email)->send(new RegisterEmail($user));
 
             return response()->json(['product' => $product], 201);
-
         } catch (Exception $e) {
 
             Log::info("Exception in ProductController@create: " . $e->getMessage());
@@ -87,8 +84,7 @@ class ProductController extends Controller
 
         try {
 
-            return response()->json(['product' => $this->productRepo->create_product($request->only(['name', 'price', 'status']))], 200);
-
+            return response()->json(['product' => $this->productRepo->update_product($id, $request->only(['name', 'price', 'status', 'type']))], 200);
         } catch (Exception $e) {
 
             Log::info("Exception in ProductController@update: " . $e->getMessage());
@@ -102,7 +98,6 @@ class ProductController extends Controller
 
             $this->productRepo->delete_product($id);
             return response()->json(null, 204);
-
         } catch (Exception $e) {
 
             Log::info("Exception in ProductController@destroy: " . $e->getMessage());
@@ -116,10 +111,33 @@ class ProductController extends Controller
         try {
 
             return response()->json(['user' => $this->productRepo->get_product_owner_details($id)], 200);
-
         } catch (Exception $e) {
 
             Log::info("Exception in ProductController@product_owner: " . $e->getMessage());
+            return response()->json(['message' => trans('Api.something_wrong')], 404);
+        }
+    }
+
+    public function product_changes($id)
+    {
+        try {
+
+            return response()->json(['product_history' => $this->productRepo->get_product_changes($id)], 200);
+        } catch (Exception $e) {
+
+            Log::info("Exception in ProductController@product_changes: " . $e->getMessage());
+            return response()->json(['message' => trans('Api.something_wrong')], 404);
+        }
+    }
+
+    public function product_search($phrase)
+    {
+        try {
+
+            return response()->json(['products' => $this->productRepo->search($phrase)], 200);
+        } catch (Exception $e) {
+
+            Log::info("Exception in ProductController@product_search: " . $e->getMessage());
             return response()->json(['message' => trans('Api.something_wrong')], 404);
         }
     }
