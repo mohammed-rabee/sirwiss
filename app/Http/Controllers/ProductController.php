@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\ProductInterface;
+use App\Mail\RegisterEmail;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ProductController extends Controller
 {
@@ -54,7 +57,16 @@ class ProductController extends Controller
 
         try {
 
-            return response()->json(['product' => $this->productRepo->create_product($request->only(['name', 'price', 'status']))], 201);
+            // get the user from the auth
+            // $user = User::first();
+
+            // create the product
+            $product = $this->productRepo->create_product($request->only(['name', 'price', 'status']));
+
+            // seding the email
+            // Mail::to($user->email)->send(new RegisterEmail($user));
+
+            return response()->json(['product' => $product], 201);
 
         } catch (Exception $e) {
 
