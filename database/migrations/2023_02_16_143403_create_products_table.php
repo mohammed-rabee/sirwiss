@@ -15,6 +15,11 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
+            $table->string('name')->nullable();
+            $table->float('price', 10, 2)->default(0);
+            $table->enum('status', ['available', 'out_of_stoke']);
+            $table->enum('type', ['item', 'service']);
             $table->timestamps();
         });
     }
